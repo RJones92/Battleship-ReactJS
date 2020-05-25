@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import GameSquare from "./GameSquare";
 
-function Gameboard(props) {
+function Gameboard() {
   let hitCount = 0;
 
   // ------------------ Board set up ------------------
@@ -9,8 +9,8 @@ function Gameboard(props) {
   const cols = 10;
   // squareSize should match the width and height of the 'game-square' class in the stylesheet
   const squareSize = 50;
-  // squareCoords holds the coordinates of each square
-  const squareCoords = [];
+  // squareInfo will hold the coordinates, initial status and id of each square
+  const squareInfo = [];
 
   // Track the status of each square in the gameboard in a 2d array
   //0 = empty, 1 = unsunk part of a ship, 2 = a sunken part of a ship, 3 = a missed shot
@@ -20,7 +20,7 @@ function Gameboard(props) {
   // Destroyer - 3 squares
   // Submarine - 3 squares
   // Patrol boat - 2 squares
-  const initialShipStatus = [
+  const initialStatus = [
     [0, 0, 0, 1, 1, 1, 1, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -34,18 +34,18 @@ function Gameboard(props) {
   ];
 
   // Make the gameboard
-  for (var i = 0; i < rows; i++) {
-    for (var j = 0; j < cols; j++) {
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
       // Set the coordinates of each grid square
-      var topPosition = i * squareSize;
-      var leftPosition = j * squareSize;
+      let topPosition = i * squareSize;
+      let leftPosition = j * squareSize;
       // Push the coordinates into an array
-      squareCoords.push({
-        // create a unique identifier using the squares positioning
+      squareInfo.push({
+        // create a unique identifier
         id: `${topPosition}${leftPosition}`,
         squareTopPos: topPosition,
         squareLeftPos: leftPosition,
-        shipState: initialShipStatus[i][j],
+        shipState: initialStatus[i][j],
       });
     }
   }
@@ -61,14 +61,14 @@ function Gameboard(props) {
 
   return (
     <div id="gameboard">
-      {squareCoords.map((square) => {
+      {squareInfo.map((square) => {
         return (
           <GameSquare
             key={square.id}
             id={square.id}
             topPos={square.squareTopPos}
             leftPos={square.squareLeftPos}
-            initialStatus={square.shipState}
+            shipState={square.shipState}
             increaseHitCount={increaseHitCount}
           />
         );
